@@ -1,0 +1,2 @@
+
+enum DataType {movie, character}
