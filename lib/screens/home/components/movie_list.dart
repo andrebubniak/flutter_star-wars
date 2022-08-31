@@ -6,7 +6,7 @@ import '../../../api/swapi/swapi.dart' as swapi;
 
 class MovieList extends StatelessWidget 
 {
-  late Future<List<MovieOrCharacter>> _movieListData;
+  late final Future<List<MovieOrCharacter>> _movieListData;
   MovieList({Key? key}) : super(key: key)
   {
     _movieListData = _getData();
@@ -14,11 +14,18 @@ class MovieList extends StatelessWidget
 
   Future<List<MovieOrCharacter>> _getData() async
   {
-    List<String> movies = await swapi.fetchMovies();
-    return movies.map<MovieOrCharacter>((movieName)
+    try
     {
-      return MovieOrCharacter(name: movieName, dataType: DataType.movie);
-    }).toList();
+      List<String> movies = await swapi.fetchMovies();
+      return movies.map<MovieOrCharacter>((movieName)
+      {
+        return MovieOrCharacter(name: movieName, dataType: DataType.movie);
+      }).toList();
+    }
+    catch(err)
+    {
+      return Future.error(err);
+    }
   }
 
   @override

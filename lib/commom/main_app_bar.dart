@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:star_wars/commom/widget_view.dart';
 
+import '../screens/star_wars_web_view/web_view.dart';
+
 class MainAppBar extends StatelessWidget with PreferredSizeWidget
 {
-  const MainAppBar({Key? key}) : super(key: key);
+  final void Function() onOfficialSiteButtonClick;
+  final void Function() onAvatarButtonClick;
+  const MainAppBar({Key? key, required this.onAvatarButtonClick, required this.onOfficialSiteButtonClick}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => _MainAppBarView(this);
@@ -27,12 +31,12 @@ class _MainAppBarView extends StatelessView<MainAppBar>
         color: Colors.black,
         padding: const EdgeInsets.all(0),
         icon: const Icon(Icons.account_circle_outlined),
-        onPressed: () {}
+        onPressed: widget.onAvatarButtonClick
       ),
     );
   }
 
-  Widget _officialSiteButton()
+  Widget _officialSiteButton(BuildContext context)
   {
     return Padding(
         padding: const EdgeInsets.only(left: 8, top: 8),
@@ -43,7 +47,7 @@ class _MainAppBarView extends StatelessView<MainAppBar>
               borderRadius: BorderRadius.circular(24)
             )
           ),
-          onPressed: () {},
+          onPressed: widget.onOfficialSiteButtonClick,
           child: const Text(
             "Site Oficial",
             style: TextStyle(
@@ -62,7 +66,7 @@ class _MainAppBarView extends StatelessView<MainAppBar>
       leadingWidth: 120,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: _officialSiteButton(),
+      leading: _officialSiteButton(context),
       actions: [
         _avatarButton()
       ],

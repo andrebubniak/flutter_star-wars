@@ -5,7 +5,7 @@ import 'item_list.dart';
 
 class ListOfNames extends StatelessWidget 
 {
-  final Future<List<MovieOrCharacter>> listOfMovieOrCharacter;
+  final Future<List<MovieOrCharacter>>? listOfMovieOrCharacter;
   const ListOfNames({
     Key? key,
     required this.listOfMovieOrCharacter

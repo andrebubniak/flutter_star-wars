@@ -5,78 +5,32 @@ import 'package:star_wars/commom/widget_view.dart';
 import 'package:star_wars/screens/home/components/character_list.dart';
 import 'package:star_wars/screens/home/components/item_list.dart';
 import 'package:star_wars/screens/home/components/movie_list.dart';
+import '../star_wars_web_view/web_view.dart';
 import '/commom/main_app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:star_wars/api/swapi/swapi.dart' as swapi;
 
-class Home extends StatefulWidget 
+class Home extends StatelessWidget 
 {
   MovieList get _movieList => MovieList();
   CharacterList get _characterList => CharacterList();
 
   Home({Key? key}) : super(key: key);
 
-  @override
-  State<Home> createState() => _HomeState();
-}
+  void _goToOfficialSite(BuildContext context) => Navigator.push(context, MaterialPageRoute(builder: (context) => const WebView()));
 
-class _HomeState extends State<Home>
-{
-  late Future<List<String>> charactersApiResponse;
-
-  @override
-  void initState()
-  {
-    //charactersApiResponse = fetchCharacters();
-    charactersApiResponse = swapi.fetchMovies();
-    super.initState();
-    
-  }
-
-  Future<List<String>> listaTeste = Future<List<String>>.delayed(Duration(seconds: 5), () =>
-    [
-      "Luke Skywalker",
-      "c-3PO",
-      "R2-D2",
-      "Darth Vader",
-      "Leia Organa",
-      "Owen lARS",
-      "Beru",
-      "Biggs",
-      "Obi-Wan"
-    ]
-  );
-
-  List<String> lista = 
-  [
-    "Luke Skywalker",
-    "c-3PO",
-    "R2-D2",
-    "Darth Vader",
-    "Leia Organa",
-    "Owen lARS",
-    "Beru",
-    "Biggs",
-    "Obi-Wan"
-  ];
-
-  void addName(String name)
-  {
-    lista.add(name);
-    setState(() {
-      
-    });
-  }
+  void _goToAvatarScreen(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) => _HomeView(this);
 }
 
 
-class _HomeView extends StatefulView<Home,_HomeState>
+
+class _HomeView extends StatelessView<Home>
 {
-  const _HomeView(super.state);
+  const _HomeView(super.widget);
 
   Widget _tabContainer(Tab tab)
   {
@@ -109,7 +63,10 @@ class _HomeView extends StatefulView<Home,_HomeState>
   {
     
     return Scaffold(
-      appBar: const MainAppBar(),
+      appBar: MainAppBar(
+        onOfficialSiteButtonClick: () => widget._goToOfficialSite(context),
+        onAvatarButtonClick: () => widget._goToAvatarScreen(context),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 24),
         child: DefaultTabController(
@@ -125,11 +82,8 @@ class _HomeView extends StatefulView<Home,_HomeState>
                 )
               ),
               Flexible(
-                //width: double.maxFinite,
-                //height: MediaQuery.of(context).size.height/1.5,
                 child: TabBarView(
                   children: [
-                    //ListView.builder()
                     widget._movieList,
                     widget._characterList,
                     Center(child: Text("Favoritos"),)
@@ -145,3 +99,4 @@ class _HomeView extends StatefulView<Home,_HomeState>
   }
 
 }
+

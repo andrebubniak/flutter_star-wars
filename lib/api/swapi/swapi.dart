@@ -14,7 +14,15 @@ Future<List<String>> _fetchData(String url) async
   List<String> dataList = <String>[];
   while(next != null)
   {
-    response = await http.get(Uri.parse(next));
+    try
+    {
+      response = await http.get(Uri.parse(next));
+    }
+    catch(_)
+    {
+      return Future.error(Exception("Erro ao requisitar dados"));
+    }
+    
     if(response.statusCode != 200)
     {
       //print("Erro => ${response.statusCode}");

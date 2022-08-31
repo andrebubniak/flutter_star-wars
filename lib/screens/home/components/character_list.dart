@@ -14,11 +14,18 @@ class CharacterList extends StatelessWidget
 
   Future<List<MovieOrCharacter>> _getData() async
   {
-    List<String> movies = await swapi.fetchCharacters();
-    return movies.map<MovieOrCharacter>((characterName)
+    try
     {
-      return MovieOrCharacter(name: characterName, dataType: DataType.character);
-    }).toList();
+      List<String> movies = await swapi.fetchCharacters();
+      return movies.map<MovieOrCharacter>((characterName)
+      {
+        return MovieOrCharacter(name: characterName, dataType: DataType.character);
+      }).toList();
+    }
+    catch(err)
+    {
+      return Future.error(err);
+    }
   }
 
   @override
