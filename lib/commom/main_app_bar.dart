@@ -1,19 +1,41 @@
-import 'package:flutter/material.dart';
-import 'package:star_wars/commom/widget_view.dart';
+import 'dart:async';
+import 'dart:convert';
 
-import '../screens/star_wars_web_view/web_view.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttermoji/fluttermoji.dart';
+import 'package:get/get.dart';
+import 'package:star_wars/commom/widget_view.dart';
+import 'package:star_wars/database/app_state_database.dart';
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget
 {
   final void Function() onOfficialSiteButtonClick;
   final void Function() onAvatarButtonClick;
-  const MainAppBar({Key? key, required this.onAvatarButtonClick, required this.onOfficialSiteButtonClick}) : super(key: key);
+  MainAppBar({Key? key, required this.onAvatarButtonClick, required this.onOfficialSiteButtonClick}) : super(key: key)
+  {
+    Future.delayed(const Duration(milliseconds: 100), () async
+    {
+      FluttermojiController fluttermojiController;
+      fluttermojiController = Get.find<FluttermojiController>();
 
-  @override
-  Widget build(BuildContext context) => _MainAppBarView(this);
+      final db = AppStateDatabase.instance;
+      
+      String curentAvatar = await db.getAvatar();
+      Map<String?, dynamic> currentAvatarOptions = jsonDecode(curentAvatar);
+
+      if(currentAvatarOptions.isNotEmpty)
+      {
+        fluttermojiController.selectedOptions = currentAvatarOptions;
+        fluttermojiController.updatePreview();
+      }
+    });
+  }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) => _MainAppBarView(this);
   
 }
 
@@ -26,13 +48,13 @@ class _MainAppBarView extends StatelessView<MainAppBar>
   {
     return Padding(
       padding: const EdgeInsets.only(right: 12),
-      child: IconButton(
-        iconSize: 40,
-        color: Colors.black,
-        padding: const EdgeInsets.all(0),
-        icon: const Icon(Icons.account_circle_outlined),
-        onPressed: widget.onAvatarButtonClick
-      ),
+      child: TextButton(
+        onPressed: widget.onAvatarButtonClick,
+        child: FluttermojiCircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.grey[400],
+        )
+      )
     );
   }
 
@@ -57,7 +79,6 @@ class _MainAppBarView extends StatelessView<MainAppBar>
         ),
       );
   }
-
 
   @override
   Widget build(BuildContext context) 
